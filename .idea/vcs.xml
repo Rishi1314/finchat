@@ -4,6 +4,5 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/backend" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/backend/finchat" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/finchat" vcs="Git" />
   </component>
 </project>
