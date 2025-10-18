@@ -1,0 +1,4 @@
+TITLE: APR vs APY
+SOURCE: https://www.investopedia.com/terms/a/apy.asp
+
+APR is the annual percentage rate. APY accounts for compounding interest, making it slightly higher than APR. Both are important when comparing loans or savings accounts.
