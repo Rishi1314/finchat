@@ -34,3 +34,29 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+Open two terminals, one for backend and one for frontend:
+
+paste this code line by line:
+to execute:
+Terminal 1- Backend
+cd finchat/backend
+python -m venv .venv && source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env  # optional
+uvicorn app.main:app --reload --port 8000
+
+Terminal 2- Frontend
+
+cd finchat/backend
+python -m venv .venv && source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env  # optional
+uvicorn app.main:app --reload --port 8000
+
+ps: make sure you do before you pull everything from this branch. 
+Thank You.
+
+
+
