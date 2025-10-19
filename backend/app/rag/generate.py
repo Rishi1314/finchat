@@ -1,27 +1,32 @@
-import os, time, requests
+# backend/app/rag/generate.py
+from openai import OpenAI
 from app.core.config import settings
+import time
 
-HF_TOKEN = settings.HF_TOKEN
-MODEL = settings.HF_MODEL
-URL = f"https://api-inference.huggingface.co/models/{MODEL}"
-HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"} if HF_TOKEN else {}
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
-def generate(prompt: str, max_new_tokens=220, retries=2, timeout=60):
-    payload = {"inputs": prompt, "parameters": {"max_new_tokens": max_new_tokens}}
-    for attempt in range(retries + 1):
-        try:
-            t0 = time.perf_counter()
-            r = requests.post(URL, headers=HEADERS, json=payload, timeout=timeout)
-            r.raise_for_status()
-            j = r.json()
-            txt = (
-                j[0]["generated_text"]
-                if isinstance(j, list)
-                else j.get("generated_text", "")
-            )
-            latency_ms = int((time.perf_counter() - t0) * 1000)
-            return txt, latency_ms
-        except Exception as e:
-            time.sleep(1 + attempt)
-    return "(model unavailable, try again)", 0
+def generate(prompt: str, max_tokens: int = 220, temperature: float = 0.2):
+    import traceback
+
+    try:
+        t0 = time.perf_counter()
+        resp = client.chat.completions.create(
+            model=settings.OPENAI_MODEL,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=max_tokens,
+            temperature=temperature,
+        )
+        latency_ms = int((time.perf_counter() - t0) * 1000)
+        text = resp.choices[0].message.content.strip()
+        return text, latency_ms
+    except Exception as e:
+        print("⚠️ OpenAI error:", e)
+        traceback.print_exc()
+        return "(model unavailable, internal error)", 0
+
+
+# Quick test
+if __name__ == "__main__":
+    txt, ms = generate("Explain APR vs APY in one short paragraph.")
+    print(txt, f"\n\nLatency: {ms} ms")
