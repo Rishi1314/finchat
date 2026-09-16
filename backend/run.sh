@@ -21,10 +21,10 @@ fi
 # shellcheck source=/dev/null
 . "$VENV_ACT"
 
-# Install requirements if uvicorn not available in the venv
-if ! command -v uvicorn >/dev/null 2>&1; then
+# Install requirements if a key project dependency is missing
+if ! python -c "import fastapi, pydantic_settings, sentence_transformers, faiss, openai" >/dev/null 2>&1; then
 	echo "Installing Python requirements..."
-	pip install -r "$PROJECT_ROOT/requirements.txt"
+	python -m pip install -r "$PROJECT_ROOT/requirements.txt"
 fi
 
 # Load environment variables from backend/.env if present
@@ -36,5 +36,6 @@ if [ -f "$SCRIPT_DIR/.env" ]; then
 fi
 
 echo "Starting Uvicorn (app: app.main:app) on 127.0.0.1:8000..."
-exec uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+cd "$SCRIPT_DIR"
+exec python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 

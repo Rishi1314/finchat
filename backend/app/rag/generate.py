@@ -3,11 +3,14 @@ from openai import OpenAI
 from app.core.config import settings
 import time
 
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
+client = OpenAI(api_key=settings.OPENAI_API_KEY) if settings.OPENAI_API_KEY else None
 
 
 def generate(prompt: str, max_tokens: int = 220, temperature: float = 0.2):
     import traceback
+
+    if client is None:
+        return "(model unavailable, set OPENAI_API_KEY to enable answers)", 0
 
     try:
         t0 = time.perf_counter()
