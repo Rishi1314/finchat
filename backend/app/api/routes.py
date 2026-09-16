@@ -25,7 +25,7 @@ def ask(body: AskRequest):
     prompt = f"{sys_prompt}\n\nCONTEXT:\n{context}\n\nQUESTION: {q}\n\nANSWER (concise, <=120 words):"
 
     # 3) Call OpenAI
-    answer, latency_ms = generate(prompt)
+    answer, latency_ms = generate(prompt, question=q)
 
     # 4) Simple confidence heuristic
     def conf_tag(text: str):
